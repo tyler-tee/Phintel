@@ -8,11 +8,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 
-def entropy(s):
-    p, lns = Counter(s), float(len(s))
-    return -sum(count / lns * math.log(count / lns, 2) for count in p.values())
-
-
 def get_tokens(urls):
     tokens_by_slash = str(urls.encode('utf-8')).split('/')  # get tokens after splitting by slash
     all_tokens = []
