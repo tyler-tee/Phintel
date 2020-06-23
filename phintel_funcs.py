@@ -140,3 +140,6 @@ def phish_init_check(phishing_url):
     else:
         print(response.headers)
         print(response.text)
+
+
+primary_db_update()
