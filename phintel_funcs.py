@@ -6,7 +6,6 @@ from config import *
 
 phishtank_baseapi = "https://checkurl.phishtank.com/checkurl/"
 phishtank_db_url = f"http://data.phishtank.com/data/{phishtank_api_key}/online-valid.csv"
-phish_init_url = "https://phishing-initiative.lu/api/"
 
 
 def openphish_update():  # Updated every 12 hours
@@ -26,19 +25,25 @@ def openphish_update():  # Updated every 12 hours
         df_openphish['Date'] = timestamp
         df_openphish['Notes'] = 'Free Dataset'
         df_openphish['Target'] = 'Other'
-        df_openphish['IP'] = 'N/A'
 
         return df_openphish
 
 
 def phishstats_update():  # Updated every 1.5 hours
+    # We're doing this with requests to handle our headers - PhishStats is sensitive
     response = requests.get("https://phishstats.info/phish_score.csv")
+    phishstats_cols = ['Date', 'Notes', 'URL', 'IP']
 
     if response.status_code == 200:
-        data = StringIO(response.content.decode("utf-8"))
-        df_phishstats = pd.read_csv(data, skiprows=9)
+        try:
+            data = StringIO(response.content.decode("utf-8"))
+            df_phishstats = pd.read_csv(data, skiprows=9)
+        except Exception as e:
+            print(e)
+            df_phishstats = pd.DataFrame(columns=phishstats_cols, data=None)
 
-        df_phishstats.columns = ["Date", "Notes", "URL", "IP"]
+        df_phishstats.columns = phishstats_cols
+        df_phishstats.drop(columns=['IP'], inplace=True)
 
         df_phishstats['URL'] = df_phishstats['URL'].str.lower()
         df_phishstats = df_phishstats.drop_duplicates(subset='URL', keep='first')  # Remove duplicate URL's
@@ -55,7 +60,11 @@ def phishstats_update():  # Updated every 1.5 hours
 def phishtank_update():  # Updated every 1 hour
     phishtank_cols = ['url', 'phish_detail_url', 'submission_time', 'target']  # Expected columns
 
-    df_phishtank = pd.read_csv(phishtank_db_url, usecols=phishtank_cols)  # Read csv into dataframe from url
+    try:
+        df_phishtank = pd.read_csv(phishtank_db_url, usecols=phishtank_cols)  # Read csv into dataframe from url
+    except Exception as e:
+        print(e)
+        df_phishtank = pd.DataFrame(columns=phishtank_cols, data=None)
 
     # Standardize our column names
     df_phishtank.rename(columns={"url": "URL", "phish_detail_url": "Notes",
@@ -79,14 +88,14 @@ def primary_db_update():
     df_primary = df_openphish.append(df_phishstats)
     df_primary = df_primary.append(df_phishtank)
 
-    # Try and append dataframe based on established data - Move on otherwise
+    # Try and append dataframe based on established data - Move on if the file isn't available
     try:
         prev_primary = pd.read_csv('primary.csv')
         df_primary = df_primary.append(prev_primary)
     except FileNotFoundError:
         pass
 
-    df_primary['URL'] = df_primary['URL'].str.lower()
+    df_primary['URL'] = df_primary['URL'].str.lower()  # Just to ensure consistency among our URL's
     df_primary = df_primary.drop_duplicates(subset='URL', keep='first')  # Filter out any duplicate URL's
     df_primary['Date'] = pd.to_datetime(df_primary['Date'])  # Make sure our date is in ISO 8601
 
@@ -95,51 +104,19 @@ def primary_db_update():
     return df_primary
 
 
-def primary_db_search(search_term, column, dataframe):
-    results = dataframe[dataframe[column].str.contains(search_term, na=False)]
+def primary_db_search(search_term, dataframe, search_type='exact', column='URL'):
+    if search_type != 'exact':
+        results = dataframe[dataframe[column].str.contains(search_term, na=False)]
+    else:
+        results = dataframe.loc[dataframe[column] == search_term]
 
-    return results
+    return not results.empty
 
 
-def primary_db_aggregate(csv):
-    df_raw = pd.read_csv(csv)
+def primary_db_aggregate(dataframe):
 
-    df_aggregate = df_raw.groupby('Target').agg({'URL': 'nunique'}).reset_index()  # Aggregate targets by attempts
+    df_aggregate = dataframe.groupby('Target').agg({'URL': 'nunique'}).reset_index()  # Aggregate targets by attempts
 
     df_aggregate = df_aggregate.sort_values('URL', ascending=False)
 
     return df_aggregate
-
-
-def phishtank_query(phishing_url):
-    payload = {
-        "url": phishing_url,
-        "format": "json",
-        "app_key": phishtank_api_key
-    }
-
-    response = requests.post(phishtank_baseapi, data=payload)
-
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(response.headers)
-        print(response.text)
-
-
-def phish_init_check(phishing_url):
-    headers = {
-        "Authorization": f"Token {phish_init_api_key}"
-    }
-
-    response = requests.get(phish_init_url + "v1/urls/lookup", headers=headers,
-                            params={"url": phishing_url})
-
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(response.headers)
-        print(response.text)
-
-
-primary_db_update()

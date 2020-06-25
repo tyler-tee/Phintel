@@ -6,3 +6,8 @@
 /sample_data/
 /share/
 /etc/
+/ml_model.pkl
+/ml_dataset.csv
+/ml_vectorizer.pkl
+/primary.csv
+/pyvenv.cfg

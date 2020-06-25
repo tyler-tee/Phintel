@@ -3,12 +3,11 @@ from dash.dependencies import Input, Output
 import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
-import pandas as pd
 import plotly.graph_objects as go
 from phintel_funcs import *
 
 df_primary = pd.read_csv('primary.csv')
-df_aggregate = primary_db_aggregate('primary.csv')
+df_aggregate = primary_db_aggregate(df_primary)
 
 target_fig = go.Figure(data=[
     go.Bar(
@@ -20,6 +19,7 @@ target_fig = go.Figure(data=[
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
+    html.A(html.Button('Refresh Table'), id='df_refresh', n_clicks=0),
     dash_table.DataTable(
         id='table',
         columns=[{"name": col, "id": col, "selectable": True} for col in df_primary.columns],
@@ -48,6 +48,17 @@ app.layout = html.Div([
         dcc.Graph(figure=target_fig)
     ])
 ])
+
+
+@app.callback(
+    Output('table', 'data'),
+    [Input('df_refresh', 'n_clicks')]
+)
+def update_table(n_clicks):
+    if n_clicks is not None:
+        df_updated = primary_db_update()
+        return df_updated.to_dict('records')
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
