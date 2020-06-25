@@ -47,9 +47,6 @@ def predict_train(dataset):
     return vectorizer, clf, train_score, test_score
 
 
-# vectorizer, lgs, training_score, testing_score = TL()
-
-
 def save_predict(model, vectorizer):
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H%M')
 
