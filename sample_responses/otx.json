@@ -1,0 +1,30 @@
+{
+  "indicator": "https://www.google.com",
+  "alexa": "http://www.alexa.com/siteinfo/google.com",
+  "whois": "http://whois.domaintools.com/google.com",
+  "sections": [
+    "general",
+    "url_list",
+    "http_scans",
+    "screenshot"
+  ],
+  "hostname": "www.google.com",
+  "pulse_info": {
+    "count": 0,
+    "references": [],
+    "pulses": []
+  },
+  "domain": "google.com",
+  "base_indicator": {
+    "indicator": "https://www.google.com",
+    "description": "",
+    "title": "",
+    "access_reason": "",
+    "access_type": "public",
+    "content": "",
+    "type": "URL",
+    "id": 2129558363
+  },
+  "type": "url",
+  "type_title": "URL"
+}

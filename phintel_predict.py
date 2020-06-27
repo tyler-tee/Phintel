@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 import numpy as np
 import pandas as pd
 import pickle
@@ -9,8 +10,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 
-def get_tokens(urls):
-    tokens = list(set(re.split('[/.-?=]', urls)))  # Split our URL's on any of these delimiters
+def get_tokens(url: str) -> List:
+    tokens = list(set(re.split('[/.-?=]', url)))  # Split our URL on any of these delimiters
 
     tokens = [token for token in tokens if token and token != 'com']
 
@@ -18,7 +19,7 @@ def get_tokens(urls):
 
 
 # Used ml_dataset.csv for the below f(x) to achieve 97-98% score
-def predict_train(dataset):
+def predict_train(dataset: str):
     df_allurls = pd.read_csv(dataset, dtype={'url': str, 'label': str},
                              error_bad_lines=False)  # reading file
 
@@ -47,7 +48,7 @@ def predict_train(dataset):
     return vectorizer, clf, train_score, test_score
 
 
-def save_predict(model, vectorizer):
+def save_predict(model: pickle, vectorizer: pickle):
     timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H%M')
 
     with open(f'ml_model {timestamp}.pkl', 'wb') as f:
@@ -56,7 +57,7 @@ def save_predict(model, vectorizer):
         pickle.dump(vectorizer, f)
 
 
-def load_trained(model_pkl, vectorizer_pkl):
+def load_trained(model_pkl: str, vectorizer_pkl: str):
     with open(model_pkl, 'rb') as f:
         model = pickle.load(f)
     with open(vectorizer_pkl, 'rb') as f:

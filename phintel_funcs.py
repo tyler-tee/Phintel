@@ -1,14 +1,18 @@
 import datetime
+from typing import Union
+
 import requests
 import pandas as pd
 from io import StringIO
 from config import *
 
+otx_headers = {'X-OTX-API-KEY': otx_key}
+otx_baseapi = 'https://otx.alienvault.com/api/v1'
 phishtank_baseapi = "https://checkurl.phishtank.com/checkurl/"
 phishtank_db_url = f"http://data.phishtank.com/data/{phishtank_api_key}/online-valid.csv"
 
 
-def openphish_update():  # Updated every 12 hours
+def openphish_update() -> pd.DataFrame:  # Updated every 12 hours
     timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S+00:00")
     response = requests.get("https://openphish.com/feed.txt")
 
@@ -29,7 +33,7 @@ def openphish_update():  # Updated every 12 hours
         return df_openphish
 
 
-def phishstats_update():  # Updated every 1.5 hours
+def phishstats_update() -> pd.DataFrame:  # Updated every 1.5 hours
     # We're doing this with requests to handle our headers - PhishStats is sensitive
     response = requests.get("https://phishstats.info/phish_score.csv")
     phishstats_cols = ['Date', 'Notes', 'URL', 'IP']
@@ -57,7 +61,7 @@ def phishstats_update():  # Updated every 1.5 hours
         return df_phishstats
 
 
-def phishtank_update():  # Updated every 1 hour
+def phishtank_update() -> pd.DataFrame:  # Updated every 1 hour
     phishtank_cols = ['url', 'phish_detail_url', 'submission_time', 'target']  # Expected columns
 
     try:
@@ -78,7 +82,7 @@ def phishtank_update():  # Updated every 1 hour
     return df_phishtank
 
 
-def primary_db_update():
+def primary_db_update() -> pd.DataFrame:
     # Gather our initial dataframes from all available sources
     df_openphish = openphish_update()
     df_phishstats = phishstats_update()
@@ -104,7 +108,8 @@ def primary_db_update():
     return df_primary
 
 
-def primary_db_search(search_term, dataframe, search_type='exact', column='URL'):
+def primary_db_search(search_term: str, dataframe: pd.DataFrame,
+                      search_type: str = 'exact', column: str = 'URL'):
     if search_type != 'exact':
         results = dataframe[dataframe[column].str.contains(search_term, na=False)]
     else:
@@ -113,10 +118,31 @@ def primary_db_search(search_term, dataframe, search_type='exact', column='URL')
     return not results.empty
 
 
-def primary_db_aggregate(dataframe):
-
+def primary_db_aggregate(dataframe: pd.DataFrame) -> pd.DataFrame:
     df_aggregate = dataframe.groupby('Target').agg({'URL': 'nunique'}).reset_index()  # Aggregate targets by attempts
 
     df_aggregate = df_aggregate.sort_values('URL', ascending=False)
 
     return df_aggregate
+
+
+def otx_url_search(url: str, section: str = 'general') -> Union[dict, requests]:
+    response = requests.get(f'{otx_baseapi}/indicators/url/{url}/{section}',
+                            headers=otx_headers)
+
+    if response.status_code == 200:
+        return response.json()
+
+    else:
+        return response
+
+
+def otx_domain_search(domain: str, section: str = 'general') -> Union[dict, requests]:
+    response = requests.get(f'{otx_baseapi}/indicators/domain/{domain}/{section}',
+                            headers=otx_headers)
+
+    if response.status_code == 200:
+        return response.json()
+
+    else:
+        return response
