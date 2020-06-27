@@ -1,6 +1,4 @@
 import datetime
-from typing import Union
-
 import requests
 import pandas as pd
 from io import StringIO
@@ -126,23 +124,33 @@ def primary_db_aggregate(dataframe: pd.DataFrame) -> pd.DataFrame:
     return df_aggregate
 
 
-def otx_url_search(url: str, section: str = 'general') -> Union[dict, requests]:
+def otx_url_search(url: str, section: str = 'general') -> dict:
     response = requests.get(f'{otx_baseapi}/indicators/url/{url}/{section}',
                             headers=otx_headers)
 
-    if response.status_code == 200:
+    if response.status_code == 200 and 'endpoint not found' not in response.text:
         return response.json()
 
-    else:
-        return response
 
-
-def otx_domain_search(domain: str, section: str = 'general') -> Union[dict, requests]:
+def otx_domain_search(domain: str, section: str = 'general') -> dict:
     response = requests.get(f'{otx_baseapi}/indicators/domain/{domain}/{section}',
                             headers=otx_headers)
 
-    if response.status_code == 200:
+    if response.status_code == 200 and 'endpoint not found' not in response.text:
         return response.json()
 
-    else:
-        return response
+
+def rawhttp_sub(url: str) -> str:
+    user_agent = ("Mozilla/5.0 (Windows NT 10.0; WOW64)"
+                  "AppleWebKit/537.36 (KHTML, like Gecko)"
+                  "Chrome/53.0.2785.143 Safari/537.36")
+
+    payload = {'ua': user_agent,
+               'url': url}
+
+    endpoint = 'https://rawhttp.com/getimage'
+
+    response = requests.post(endpoint, json=payload)
+
+    if response.status_code == 200 and 'errorMessage' not in response.text:
+        return response.text
