@@ -18,7 +18,7 @@ def get_tokens(url: str) -> List:
     return tokens
 
 
-# Used ml_dataset.csv for the below f(x) to achieve 97-98% score
+# Used ml_dataset.csv for the below f(x) to achieve a 97-98% score
 def predict_train(dataset: str):
     df_allurls = pd.read_csv(dataset, dtype={'url': str, 'label': str},
                              error_bad_lines=False)  # reading file

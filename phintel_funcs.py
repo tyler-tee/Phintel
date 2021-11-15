@@ -2,12 +2,24 @@ import datetime
 import requests
 import pandas as pd
 from io import StringIO
+import sqlite3
+from urllib.parse import urlparse
 from config import *
 
 otx_headers = {'X-OTX-API-KEY': otx_key}
 otx_baseapi = 'https://otx.alienvault.com/api/v1'
 phishtank_baseapi = "https://checkurl.phishtank.com/checkurl/"
 phishtank_db_url = f"http://data.phishtank.com/data/{phishtank_api_key}/online-valid.csv"
+
+
+def domain_parser(url):
+    t = urlparse(str(url))
+    parsed = '.'.join(t.netloc.split('.')[-2:])
+
+    if parsed == 'com':
+        return t
+    else:
+        return parsed
 
 
 def openphish_update() -> pd.DataFrame:  # Updated every 12 hours
@@ -96,12 +108,22 @@ def primary_db_update() -> pd.DataFrame:
         df_primary = df_primary.append(prev_primary)
     except FileNotFoundError:
         pass
+    
+    try:
+        conn = sqlite3.connect('./primary.sqlite')
+        primary_db = pd.read_sql('SELECT * FROM main', con=conn)
+        df_primary = df_primary.append(primary_db)
+    except Exception as e:
+        print(e)
 
+    
     df_primary['URL'] = df_primary['URL'].str.lower()  # Just to ensure consistency among our URL's
     df_primary = df_primary.drop_duplicates(subset='URL', keep='first')  # Filter out any duplicate URL's
+    df_primary['Domain'] = df_primary['URL'].apply(lambda x: domain_parser(x)) # Parse domains from our URL's
     df_primary['Date'] = pd.to_datetime(df_primary['Date'])  # Make sure our date is in ISO 8601
 
     df_primary.to_csv('primary.csv', index=False)  # Write primary dataframe to disk as a csv
+    df_primary.to_sql('main', conn, if_exists='replace', index=False, )
 
     return df_primary
 
@@ -116,8 +138,8 @@ def primary_db_search(search_term: str, dataframe: pd.DataFrame,
     return not results.empty
 
 
-def primary_db_aggregate(dataframe: pd.DataFrame) -> pd.DataFrame:
-    df_aggregate = dataframe.groupby('Target').agg({'URL': 'nunique'}).reset_index()  # Aggregate targets by attempts
+def primary_db_aggregate(dataframe: pd.DataFrame, agg_value: str) -> pd.DataFrame:
+    df_aggregate = dataframe.groupby(agg_value).agg({'URL': 'nunique'}).reset_index()  # Aggregate targets by attempts
 
     df_aggregate = df_aggregate.sort_values('URL', ascending=False)
 
