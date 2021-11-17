@@ -18,7 +18,8 @@ plt_io.templates['custom_dark']['layout']['yaxis']['gridcolor'] = '#4f687d'
 plt_io.templates['custom_dark']['layout']['xaxis']['gridcolor'] = '#4f687d'
 
 # Read in our source
-df_primary = pd.read_csv('primary.csv')
+conn = sqlite3.connect('./primary.sqlite')
+df_primary = pd.read_sql('SELECT * FROM main', con=conn)
 
 # Establish our visualizations
 df_aggregate = primary_db_aggregate(df_primary, 'Domain').head(10)
