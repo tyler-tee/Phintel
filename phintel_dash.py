@@ -112,7 +112,7 @@ SIDEBAR_STYLE = {
     "padding": "4rem 1rem 2rem"
 }
 
-SIDEBAR_HIDEN = {
+SIDEBAR_HIDDEN = {
     "position": "fixed",
     "top": 62.5,
     "left": "-16rem",
@@ -212,7 +212,7 @@ def update_bar(value):
 def toggle_sidebar(n, nclick):
     if n:
         if nclick == "SHOW":
-            sidebar_style = SIDEBAR_HIDEN
+            sidebar_style = SIDEBAR_HIDDEN
             content_style = CONTENT_STYLE1
             cur_nclick = "HIDDEN"
         else:
@@ -242,7 +242,8 @@ def toggle_active_links(pathname):
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
-        page_one_content = dbc.Row([
+        page_one_content = html.Div([
+                            dbc.Row([
                                 dbc.Col([
                                     html.H1('Phintel'),
                                     html.H3('Facilitating the extraction, aggregation, and exploration of phishing intelligence.')
@@ -250,7 +251,88 @@ def render_page_content(pathname):
                                                 'align-items': 'center', 'justify-content': 'center'})
                                     ], align='center', justify='center',
                                         style={'textAlign': 'center', 'verticalAlign': 'center',
-                                                'align-items': 'center', 'justify-content': 'center'})
+                                                'align-items': 'center', 'justify-content': 'center'}),
+                            html.Br(),
+                            html.Hr(),
+                            html.Br(),
+                            html.H2('Current Sources', style={'textAlign': 'center'}),
+                            html.Br(),
+                            dbc.Row([
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Openphish", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("OpenPhish is a fully automated self-contained platform for phishing intelligence.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://openphish.com/')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        )),
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Phishstats", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("Fighting phishing and cybercrime since 2014 by gathering, enhancing and sharing phishing information with the infosec community.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href="https://phishstats.info/")
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        ))   
+                                    ]),
+                            dbc.Row([
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Phishtank", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("PhishTank is a collaborative clearing house for data and information about phishing on the Internet.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://phishtank.org/')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        )),
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("URLhaus", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("URLhaus is a project from abuse.ch with the goal of sharing malicious URLs that are being used for malware distribution.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://urlhaus.abuse.ch/')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        ))   
+                                    ]),
+                            html.Hr()
+                                                ])
+                            
+
         return page_one_content
     elif pathname == "/page-2":
         page_two_content = html.Div([
