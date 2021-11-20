@@ -123,7 +123,7 @@ def primary_db_update() -> pd.DataFrame:
 
     # Try and append dataframe based on established data - Move on if the file isn't available
     try:
-        prev_primary = pd.read_csv('primary.csv', error_bad_lines=False)
+        prev_primary = pd.read_csv('primary.csv', on_bad_lines='skip')
         df_primary = df_primary.append(prev_primary)
     except FileNotFoundError:
         pass
