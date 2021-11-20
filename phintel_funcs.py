@@ -92,19 +92,38 @@ def phishtank_update() -> pd.DataFrame:  # Updated every 1 hour
     return df_phishtank
 
 
+def urlhaus_update() -> pd.DataFrame:  # Updated every 5 minutes
+    try:
+        df_haus = pd.read_csv('https://urlhaus.abuse.ch/downloads/csv/',
+                              compression='zip', skiprows=8)
+
+        df_haus.rename(columns={"url": "URL", "dateadded": "Date",
+                                "threat": "Notes"}, inplace=True)
+        df_haus['URL'] = df_haus['URL'].str.lower()
+        df_haus = df_haus.drop_duplicates(keep='first', subset='URL')
+        df_haus = df_haus[['URL', 'Date', 'Notes']]
+        df_haus['Source'] = 'urlhaus'
+        df_haus['Target'] = 'Other'
+
+        return df_haus
+        
+    except Exception as e:
+        print(e)
+
+
 def primary_db_update() -> pd.DataFrame:
     # Gather our initial dataframes from all available sources
     df_openphish = openphish_update()
     df_phishstats = phishstats_update()
     df_phishtank = phishtank_update()
+    df_haus = urlhaus_update()
 
     # Create primary dataframe from our component dataframes
-    df_primary = df_openphish.append(df_phishstats)
-    df_primary = df_primary.append(df_phishtank)
+    df_primary = pd.concat([df_openphish, df_phishstats, df_phishtank, df_haus])
 
     # Try and append dataframe based on established data - Move on if the file isn't available
     try:
-        prev_primary = pd.read_csv('primary.csv')
+        prev_primary = pd.read_csv('primary.csv', error_bad_lines=False)
         df_primary = df_primary.append(prev_primary)
     except FileNotFoundError:
         pass
@@ -121,9 +140,11 @@ def primary_db_update() -> pd.DataFrame:
     df_primary = df_primary.drop_duplicates(subset='URL', keep='first')  # Filter out any duplicate URL's
     df_primary['Domain'] = df_primary['URL'].apply(lambda x: domain_parser(x)) # Parse domains from our URL's
     df_primary['Date'] = pd.to_datetime(df_primary['Date'])  # Make sure our date is in ISO 8601
+    df_primary['Source'] = df_primary['Source'].str.lower()
 
-    df_primary.to_csv('primary.csv', index=False)  # Write primary dataframe to disk as a csv
-    df_primary.to_sql('main', conn, if_exists='replace', index=False, )
+    if not df_primary.empty:
+        df_primary.to_csv('primary.csv', index=False)  # Write primary dataframe to disk as a csv
+        df_primary.to_sql('main', conn, if_exists='replace', index=False)
 
     return df_primary
 
