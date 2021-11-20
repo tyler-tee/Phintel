@@ -32,7 +32,7 @@ bar_fig = px.bar(df_aggregate, x='Domain', y='URL', title='Top 10 Domains')
 bar_fig.layout.template = 'custom_dark'
 
 pie_agg = primary_db_aggregate(df_primary, 'Source')
-pie_fig = px.pie(pie_agg, names='Source', values='URL', title='Sources')
+pie_fig = px.pie(pie_agg, names='Source', values='URL', title='Breakdown by Source')
 pie_fig.layout.template = 'custom_dark'
 
 time_agg = df_primary.copy()
@@ -43,13 +43,13 @@ time_fig.layout.template = 'custom_dark'
 
 sun_agg = primary_db_aggregate(df_primary, ['Source', 'Domain'])
 sun_agg = pd.concat(sun_agg[sun_agg['Source'] == source].head() for source in sources)
-sun_fig = px.sunburst(sun_agg, path=['Source', 'Domain'], values='URL', title='Domains by Source')
+sun_fig = px.sunburst(sun_agg, path=['Source', 'Domain'], values='URL', title='Top Domains by Source')
 sun_fig.layout.template = 'custom_dark'
 
 # Sidebar construction
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.Button("Phintel", outline=True, color="secondary", className="mr-1", id="btn_sidebar"),
+        dbc.Button("Data Exploration", outline=True, className="mr-1", id="btn_sidebar"),
         dbc.NavItem(dbc.NavLink("Visualizations", href="#")),
         dbc.DropdownMenu(
             children=[
@@ -113,11 +113,9 @@ CONTENT_STYLE1 = {
 
 sidebar = html.Div(
     [
-        html.H2("", className="display-4"),
+        html.H6("Tools", className="display-4"),
         html.Hr(),
-        html.P(
-            "Data Exploration", className="lead"
-        ),
+        html.P("Explore Phintel's underlying dataset.", className="lead"),
         dbc.Nav(
             [
                 dbc.NavLink("Visualizations", href="/page-1", id="page-1-link"),
@@ -136,7 +134,7 @@ content = html.Div(
     style=CONTENT_STYLE)
 
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], title='Phintel')
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], title='Phintel', suppress_callback_exceptions=True)
 
 """
 app.layout = html.Div([
@@ -203,7 +201,6 @@ app.layout = html.Div([
 """
 
 app.layout = html.Div([
-    html.H1(children='Phintel', style={'textAlign': 'center'}),    
     html.Div([
             dcc.Store(id='side_click'),
             dcc.Location(id="url"),
@@ -213,17 +210,16 @@ app.layout = html.Div([
             ]),
 ])
 
+"""
 @app.callback(
     Output(component_id='table', component_property='data'),
     [Input(component_id='df_refresh', component_property='n_clicks')]
 )
 def update_table(n_clicks):
-    pass
-    """
     if n_clicks is not None:
         df_updated = primary_db_update()
         return df_updated.to_dict('records')
-    """
+"""
 
 @app.callback(
     Output(component_id='bar_fig', component_property='figure'),
