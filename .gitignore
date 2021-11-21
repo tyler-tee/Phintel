@@ -12,6 +12,7 @@ scratch/
 /ml_dataset.csv
 /primary.csv
 /pyvenv.cfg
+sample_responses/
 __pycache__/
 *.ipynb
 *.pkl
