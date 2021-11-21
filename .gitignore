@@ -1,3 +1,4 @@
+/Backups
 /config.py
 /.idea/
 Legacy/
@@ -11,7 +12,7 @@ scratch/
 /ml_dataset.csv
 /primary.csv
 /pyvenv.cfg
-dev/__pycache__/
+__pycache__/
 *.ipynb
 *.pkl
 *.pyc
