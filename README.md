@@ -26,9 +26,15 @@
 ![ML](https://user-images.githubusercontent.com/64701075/142785011-7b7395a4-8565-4516-8d28-2975eec6fd88.JPG)
 
 
-## [Usage](https://iharsh234.github.io/WebApp/) 
+## Usage
 
-### Setup
+### Docker (Recommended)
+```
+docker build -f ./DockerFile . -t 'phintel:0.1.0'
+docker run -p 8050:8050 phintel
+```
+
+### Setup (Manual)
 ```
 python3 -m pip install requirements.txt
 ```
@@ -52,13 +58,6 @@ To fix a bug or enhance an existing module, follow these steps:
 - Commit your changes (`git commit -am 'Improve feature'`)
 - Push to the branch (`git push origin improve-feature`)
 - Create a Pull Request 
-
-### Bug / Feature Request
-
-If you find a bug (the website couldn't handle the query and / or gave undesired results), kindly open an issue [here](https://github.com/iharsh234/WebApp/issues/new) by including your search query and the expected result.
-
-If you'd like to request a new function, feel free to do so by opening an issue [here](https://github.com/iharsh234/WebApp/issues/new). Please include sample queries and their corresponding results.
-
 
 ## Built with 
 
