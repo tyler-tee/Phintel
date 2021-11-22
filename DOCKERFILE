@@ -1,8 +1,11 @@
-FROM python:3.8
+FROM python:3
 LABEL maintainer "Tyler Talaga"
+ENV TZ=US/Eastern
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /code
 WORKDIR /code
-COPY requirements.txt /
-RUN pip install -r /requirements.txt
-COPY ./ ./
-EXPOSE 8050
-CMD ["python", "./app.py"]
+RUN pip3 install dash==2.0.0 dash_bootstrap_components==1.0.0 pandas==1.3.4 numpy==1.21.2 plotly==5.3.1 requests==2.26.0 scikit_learn==1.0.1
+COPY . ./code/
+CMD ["python", "./main.py"]

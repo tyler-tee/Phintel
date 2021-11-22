@@ -5,14 +5,14 @@ import datetime
 from io import StringIO
 import pandas as pd
 import requests
-from config import phishtank_api_key, otx_key
+from config import phishtank_api_key
 from layouts import *
 import plotly.express as px
 from predict.phintel_predict import *
 import sqlite3
 from urllib.parse import urlparse
 
-otx_headers = {'X-OTX-API-KEY': otx_key}
+otx_headers = {'X-OTX-API-KEY': ''}
 otx_baseapi = 'https://otx.alienvault.com/api/v1'
 phishtank_baseapi = "https://checkurl.phishtank.com/checkurl/"
 phishtank_db_url = f"http://data.phishtank.com/data/{phishtank_api_key}/online-valid.csv"
@@ -262,7 +262,7 @@ target_agg = primary_db_aggregate(target_agg, 'Target').head(10)
 target_fig = px.bar(target_agg, x='Target', y='URL', title='Top Identified Targets')
 target_fig.layout.template = 'custom_dark'
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY],
+app = dash.Dash('Phintel', external_stylesheets=[dbc.themes.DARKLY],
                 title='Phintel', suppress_callback_exceptions=True)
 server = app.server
 
@@ -489,7 +489,7 @@ def render_page_content(pathname):
                                     html.Hr(),
                                     html.Div([
                                     dbc.Label("URL Analyzer"),
-                                    dbc.Input(id='ml_input', placeholder='https://Malicious-URL.bad', value='https://Malicious-URL.bad', debounce=True, inputmode='url'),
+                                    dbc.Input(id='ml_input', placeholder='https://Malicious-URL.bad', value='https://Malicious-URL.bad', style={'color': 'white'}, debounce=True, inputmode='url'),
                                     dbc.FormText("Supply a URL for analysis and Phintel will use rudimentary machine learning to assign it a value of good or bad.*\n",
                                                  style={'font-style': 'italic'}),
                                     html.Br(),
@@ -517,10 +517,11 @@ def render_page_content(pathname):
 def analyze_url(value):
     if (value != 'https://Malicious-URL.bad') and ('.' in value):
         try:
-            model, vectorizer = load_trained('ml_model.pkl', 'ml_vectorizer.pkl')
+            model, vectorizer = load_trained('./predict/ml_model.pkl', './predict/ml_vectorizer.pkl')
             model_loaded = True
             result = url_predict([value], vectorizer=vectorizer, model=model)
-            return f"Phintel's analysis for {value}: {' | '.join(result).title()}"
+            result = 'Malicious' if result[0] == 'bad' else 'Benign' if result[0] == 'good' else 'Unknown'
+            return f"Phintel's analysis for {value}: {result}"
         except Exception as e:
             return f"Phintel experienced an error analyzing the supplied URL:\n{e}"
     else:
