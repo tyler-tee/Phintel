@@ -62,7 +62,7 @@ If you'd like to request a new function, feel free to do so by opening an issue 
 
 ## Built with 
 
-- [Dash](http://www.w3schools.com/jquery/jquery_ref_ajax.asp) - jQuery simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.
+- [Dash](https://dash.plotly.com/introduction) - Dash is the original low-code framework for rapidly building data apps in Python, R, Julia, F#, and MATLAB®.
 
 ## To-do
 [] Build and test Docker image for portability.
