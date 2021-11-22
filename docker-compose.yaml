@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  Phintel:
+    build:
+      context: .
+    image: phintel:0.1.0
+    container_name: phintel_dash
+    restart: unless-stopped
+    ports:
+       - 8050:8050
+    networks:
+       - network 
+    
+networks:
+  network:
+    driver: bridge
+    
