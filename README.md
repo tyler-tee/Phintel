@@ -65,9 +65,9 @@ If you'd like to request a new function, feel free to do so by opening an issue 
 - [Dash](https://dash.plotly.com/introduction) - Dash is the original low-code framework for rapidly building data apps in Python, R, Julia, F#, and MATLAB®.
 
 ## To-do
-[] Build and test Docker image for portability.
-[] Add 'About' page.
-[] Add 'OSINT' page.
+- [ ] Build and test Docker image for portability.
+- [ ] Add 'About' page.
+- [ ] Add 'OSINT' page.
 
 ## License
 
