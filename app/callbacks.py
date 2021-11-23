@@ -241,6 +241,7 @@ card4 = create_card("URLhaus", f"{len(df_primary[df_primary['Source'] == 'urlhau
 bar_agg = primary_db_aggregate(df_primary, 'Domain').head(10)
 bar_fig = px.bar(bar_agg, x='Domain', y='URL', title='Top 10 Domains')
 bar_fig.layout.template = 'custom_dark'
+bar_fig.update_traces(marker_color='#2aa198')
 
 pie_agg = primary_db_aggregate(df_primary, 'Source')
 pie_fig = px.pie(pie_agg, names='Source', values='URL', title='Breakdown by Source', hole=.55)
@@ -251,6 +252,7 @@ time_agg['Date'] = time_agg['Date'].fillna('2021-01-01').apply(lambda x: pd.to_d
 time_agg = primary_db_aggregate(time_agg, 'Date').sort_values(by='Date', ascending=True)
 time_fig = px.line(time_agg, x='Date', y='URL', title='Links Over Time', range_x=['2021-01', datetime.datetime.now().strftime('%Y-%m')])
 time_fig.layout.template = 'custom_dark'
+time_fig.update_traces(line_color='#2aa198')
 
 sun_agg = primary_db_aggregate(df_primary, ['Source', 'Domain'])
 sun_agg = pd.concat(sun_agg[sun_agg['Source'] == source].head() for source in sources)
@@ -261,8 +263,9 @@ target_agg = df_primary[df_primary['Target'] != 'Other']
 target_agg = primary_db_aggregate(target_agg, 'Target').head(10)
 target_fig = px.bar(target_agg, x='Target', y='URL', title='Top Identified Targets')
 target_fig.layout.template = 'custom_dark'
+target_fig.update_traces(marker_color='#2aa198')
 
-app = dash.Dash('Phintel', external_stylesheets=[dbc.themes.DARKLY],
+app = dash.Dash('Phintel', external_stylesheets=[dbc.themes.SOLAR],
                 title='Phintel', suppress_callback_exceptions=True)
 server = app.server
 
@@ -275,6 +278,7 @@ def update_bar(value):
     df_bar = primary_db_aggregate(df_bar, 'Domain').head(10)
     bar_fig = px.bar(df_bar, x='Domain', y='URL', title='Top 10 Domains')
     bar_fig.layout.template = 'custom_dark'
+    bar_fig.update_traces(marker_color='#2aa198')
 
     return bar_fig
 
@@ -343,11 +347,11 @@ def render_page_content(pathname):
                                             html.H3("Openphish", className="card-title"),
                                             html.Br(),
                                             html.Br(),
-                                            html.H6("OpenPhish is a fully automated self-contained platform for phishing intelligence.",
+                                            html.H6("OpenPhish is a fully automated self-contained platform for phishing intelligence. OpenPhish reports only new and live phishing URLs.",
                                                     className="card-subtitle", style={'font-style': 'italic'}),
                                             html.Br(),
                                             html.Br(),
-                                            dbc.Button("Visit Site", href='https://openphish.com/')
+                                            dbc.Button("Visit Site", href='https://openphish.com/', color='info')
                                             ]
                                     ),
                                     # color="info",
@@ -364,7 +368,7 @@ def render_page_content(pathname):
                                                     className="card-subtitle", style={'font-style': 'italic'}),
                                             html.Br(),
                                             html.Br(),
-                                            dbc.Button("Visit Site", href="https://phishstats.info/")
+                                            dbc.Button("Visit Site", href="https://phishstats.info/", color='info')
                                             ]
                                     ),
                                     # color="info",
@@ -379,11 +383,11 @@ def render_page_content(pathname):
                                             html.H3("Phishtank", className="card-title"),
                                             html.Br(),
                                             html.Br(),
-                                            html.H6("PhishTank is a collaborative clearing house for data and information about phishing on the Internet.",
+                                            html.H6("PhishTank is a collaborative clearing house for data and information about phishing on the Internet. Operated by Cisco Talos Intelligence Group.",
                                                     className="card-subtitle", style={'font-style': 'italic'}),
                                             html.Br(),
                                             html.Br(),
-                                            dbc.Button("Visit Site", href='https://phishtank.org/')
+                                            dbc.Button("Visit Site", href='https://phishtank.org/', color='info')
                                             ]
                                     ),
                                     # color="info",
@@ -400,7 +404,7 @@ def render_page_content(pathname):
                                                     className="card-subtitle", style={'font-style': 'italic'}),
                                             html.Br(),
                                             html.Br(),
-                                            dbc.Button("Visit Site", href='https://urlhaus.abuse.ch/')
+                                            dbc.Button("Visit Site", href='https://urlhaus.abuse.ch/', color='info')
                                             ]
                                     ),
                                     # color="info",

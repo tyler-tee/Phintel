@@ -1,23 +1,22 @@
 from dash import html
 import dash_bootstrap_components as dbc
-
 import plotly.io as plt_io
 
 # create our custom_dark theme from the plotly_dark template
 plt_io.templates["custom_dark"] = plt_io.templates["plotly_dark"]
 
 # set the paper_bgcolor and the plot_bgcolor to a new color
-plt_io.templates["custom_dark"]['layout']['paper_bgcolor'] = '#30404D'
-plt_io.templates["custom_dark"]['layout']['plot_bgcolor'] = '#30404D'
+plt_io.templates["custom_dark"]['layout']['paper_bgcolor'] = '#073642'
+plt_io.templates["custom_dark"]['layout']['plot_bgcolor'] = '#002b36'
 
 # you may also want to change gridline colors if you are modifying background
-plt_io.templates['custom_dark']['layout']['yaxis']['gridcolor'] = '#4f687d'
-plt_io.templates['custom_dark']['layout']['xaxis']['gridcolor'] = '#4f687d'
+plt_io.templates['custom_dark']['layout']['yaxis']['gridcolor'] = '#586e75'
+plt_io.templates['custom_dark']['layout']['xaxis']['gridcolor'] = '#586e75'
 
 # Navbar construction
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.Button("Data Exploration", outline=True, className="mr-1", id="btn_sidebar"),
+        dbc.Button("Tools", outline=True, className="mr-1", id="btn_sidebar"),
         dbc.NavItem(dbc.NavLink("Home", href="/page-1")),
         dbc.DropdownMenu(
             children=[
