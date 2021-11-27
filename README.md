@@ -7,7 +7,7 @@
 </tr>
 </table>
 
-# ![Phintel](https://user-images.githubusercontent.com/64701075/142790848-5e759eb0-b9dd-4b05-85d0-c773020c099b.jpg)
+# ![Phintel](https://user-images.githubusercontent.com/64701075/143721697-c192608d-7831-440b-81da-6e828c67dc75.JPG)
 
 
 ## Current Data Sources
@@ -19,13 +19,13 @@
 ## Current Features
 
 ### Visualizations
-![Charts](https://user-images.githubusercontent.com/64701075/142784984-9d0d9047-633f-4ebd-a91d-e21b53fe2060.JPG)
+![Charts](https://user-images.githubusercontent.com/64701075/143721700-f9f6cfa2-a927-42c0-b643-b94da4a4d815.jpg)
 
 ### Live Dataset Exploration
-![Dataset](https://user-images.githubusercontent.com/64701075/142784996-c6cdcf3c-c712-4e17-8b05-77a856c7e7fe.jpg)
+![Dataset](https://user-images.githubusercontent.com/64701075/143721698-669037ac-59f7-4a2c-a65e-7c90115a5aec.jpg)
 
 ### ML-Based Analysis
-![ML](https://user-images.githubusercontent.com/64701075/142785011-7b7395a4-8565-4516-8d28-2975eec6fd88.JPG)
+![ML](https://user-images.githubusercontent.com/64701075/143721699-e6b563d0-0dc7-485e-9218-b70e6bb9a87a.jpg)
 
 
 ## Usage
@@ -66,12 +66,10 @@ To fix a bug or enhance an existing module, follow these steps:
 - [Dash](https://dash.plotly.com/introduction) - Dash is the original low-code framework for rapidly building data apps in Python, R, Julia, F#, and MATLAB®.
 
 ## To-do
-- [ ] Build and test Docker image for portability.
-- [ ] Add 'About' page.
+- [X] Build and test Docker image for portability.
+- [X] Add 'About' page.
 - [ ] Add 'OSINT' page.
 
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-
