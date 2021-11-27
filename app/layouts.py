@@ -37,6 +37,7 @@ navbar = dbc.NavbarSimple(
     color="dark",
     dark=True,
     fluid=True,
+    id='navbar'
 )
 
 # the style arguments for the sidebar. We use position:fixed and a fixed width
@@ -100,11 +101,11 @@ sidebar = html.Div(
         ),
     ],
     id="sidebar",
-    style=SIDEBAR_STYLE,
+    style=SIDEBAR_HIDDEN,
 )
 
 content = html.Div(
     id="page-content",
-    style=CONTENT_STYLE)
+    style=CONTENT_STYLE1)
 
 

@@ -289,23 +289,29 @@ def update_bar(value):
         Output("page-content", "style"),
         Output("side_click", "data"),
     ],
-    [Input("btn_sidebar", "n_clicks")],
+    [Input("btn_sidebar", "n_clicks"),
+     Input("url", "pathname")],
     [State("side_click", "data"),]
 )
-def toggle_sidebar(n, nclick):
-    if n:
-        if nclick == "SHOW":
-            sidebar_style = SIDEBAR_HIDDEN
-            content_style = CONTENT_STYLE1
-            cur_nclick = "HIDDEN"
+def toggle_sidebar(n, pathname, nclick):
+    if pathname in ["/", "/page-1"]:
+        sidebar_style = SIDEBAR_HIDDEN
+        content_style = CONTENT_STYLE1
+        cur_nclick = "HIDDEN"
+    else:
+        if n:
+            if nclick == "SHOW":
+                sidebar_style = SIDEBAR_HIDDEN
+                content_style = CONTENT_STYLE1
+                cur_nclick = "HIDDEN"
+            else:
+                sidebar_style = SIDEBAR_STYLE
+                content_style = CONTENT_STYLE
+                cur_nclick = "SHOW"
         else:
             sidebar_style = SIDEBAR_STYLE
             content_style = CONTENT_STYLE
-            cur_nclick = "SHOW"
-    else:
-        sidebar_style = SIDEBAR_STYLE
-        content_style = CONTENT_STYLE
-        cur_nclick = 'SHOW'
+            cur_nclick = 'SHOW'
 
     return sidebar_style, content_style, cur_nclick
 
@@ -320,6 +326,17 @@ def toggle_active_links(pathname):
         # Treat page 1 as the homepage / index
         return True, False, False, False, False
     return [pathname == f"/page-{i}" for i in range(1, 6)]
+
+
+@app.callback(Output("navbar", "style"),
+              Input("url", "pathname"))
+def navbar_toggle(pathname):
+    if pathname in ["/", "/page-1"]:
+        nav_style = {'display': 'none'}
+    else:
+        nav_style = {'display': 'block'}
+    
+    return nav_style
 
 
 @app.callback(Output("page-content", "children"),
