@@ -312,109 +312,38 @@ def toggle_sidebar(n, nclick):
 # this callback uses the current pathname to set the active state of the
 # corresponding nav link to true, allowing users to tell see page they are on
 @app.callback(
-    [Output(f"page-{i}-link", "active") for i in range(1, 5)],
+    [Output(f"page-{i}-link", "active") for i in range(1, 6)],
     [Input("url", "pathname")],
 )
 def toggle_active_links(pathname):
     if pathname == "/":
         # Treat page 1 as the homepage / index
-        return True, False, False, False
-    return [pathname == f"/page-{i}" for i in range(1, 5)]
+        return True, False, False, False, False
+    return [pathname == f"/page-{i}" for i in range(1, 6)]
 
 
-@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+@app.callback(Output("page-content", "children"),
+              [Input("url", "pathname")])
 def render_page_content(pathname):
     if pathname in ["/", "/page-1"]:
-        page_one_content = html.Div([
-                            dbc.Row([
-                                dbc.Col([
-                                    html.H1('Phintel'),
-                                    html.H5('Facilitating the extraction, aggregation, and exploration of phishing intelligence.')
-                                        ], align='center', style={'textAlign': 'center', 'verticalAlign': 'center',
-                                                'align-items': 'center', 'justify-content': 'center'})
-                                    ], align='center', justify='center',
-                                        style={'textAlign': 'center', 'verticalAlign': 'center',
-                                                'align-items': 'center', 'justify-content': 'center'}),
-                            html.Br(),
-                            html.Hr(),
-                            html.Br(),
-                            html.H2('Current Sources', style={'textAlign': 'center'}),
-                            html.Br(),
-                            dbc.Row([
-                                dbc.Col(dbc.Card(
-                                    dbc.CardBody(
-                                        [
-                                            html.H3("Openphish", className="card-title"),
-                                            html.Br(),
-                                            html.Br(),
-                                            html.H6("OpenPhish is a fully automated self-contained platform for phishing intelligence. OpenPhish reports only new and live phishing URLs.",
-                                                    className="card-subtitle", style={'font-style': 'italic'}),
-                                            html.Br(),
-                                            html.Br(),
-                                            dbc.Button("Visit Site", href='https://openphish.com/', color='info')
-                                            ]
-                                    ),
-                                    # color="info",
-                                    inverse=True,
-                                    outline=True
-                                        )),
-                                dbc.Col(dbc.Card(
-                                    dbc.CardBody(
-                                        [
-                                            html.H3("Phishstats", className="card-title"),
-                                            html.Br(),
-                                            html.Br(),
-                                            html.H6("Fighting phishing and cybercrime since 2014 by gathering, enhancing and sharing phishing information with the infosec community.",
-                                                    className="card-subtitle", style={'font-style': 'italic'}),
-                                            html.Br(),
-                                            html.Br(),
-                                            dbc.Button("Visit Site", href="https://phishstats.info/", color='info')
-                                            ]
-                                    ),
-                                    # color="info",
-                                    inverse=True,
-                                    outline=True
-                                        ))   
-                                    ]),
-                            dbc.Row([
-                                dbc.Col(dbc.Card(
-                                    dbc.CardBody(
-                                        [
-                                            html.H3("Phishtank", className="card-title"),
-                                            html.Br(),
-                                            html.Br(),
-                                            html.H6("PhishTank is a collaborative clearing house for data and information about phishing on the Internet. Operated by Cisco Talos Intelligence Group.",
-                                                    className="card-subtitle", style={'font-style': 'italic'}),
-                                            html.Br(),
-                                            html.Br(),
-                                            dbc.Button("Visit Site", href='https://phishtank.org/', color='info')
-                                            ]
-                                    ),
-                                    # color="info",
-                                    inverse=True,
-                                    outline=True
-                                        )),
-                                dbc.Col(dbc.Card(
-                                    dbc.CardBody(
-                                        [
-                                            html.H3("URLhaus", className="card-title"),
-                                            html.Br(),
-                                            html.Br(),
-                                            html.H6("URLhaus is a project from abuse.ch with the goal of sharing malicious URLs that are being used for malware distribution.",
-                                                    className="card-subtitle", style={'font-style': 'italic'}),
-                                            html.Br(),
-                                            html.Br(),
-                                            dbc.Button("Visit Site", href='https://urlhaus.abuse.ch/', color='info')
-                                            ]
-                                    ),
-                                    # color="info",
-                                    inverse=True,
-                                    outline=True
-                                        ))   
-                                    ]),
-                            html.Hr()
-                                                ])
-                            
+        page_one_content = dbc.Container(
+            [
+                dbc.Row(
+                    [dbc.Col()], class_name='h-50'
+                ),
+                dbc.Row(
+                    [
+                        dbc.Col([
+                            html.H1('Phintel'),
+                            html.H5('Facilitating the extraction, aggregation, and exploration of phishing intelligence.'),
+                            dbc.Button('Visualizations', href='/page-2', color='info', style={'margin': '3px'}), dbc.Button('Raw Data', href='/page-3', color='info', style={'margin': '3px', 'padding-left': '26px', 'padding-right': '26px'}),
+                            dbc.Button('ML Analysis', href='/page-4', color='info', style={'margin': '3px', 'padding-left': '19px', 'padding-right': '19px'}), dbc.Button('About', href='/page-5', color='info', style={'margin': '3px', 'padding-left': '37px', 'padding-right': '37px'})
+                        ],
+                        style={'height': '100%', 'text-align': 'center'})
+                    ], class_name='h-50'
+                )
+            ], style={'height': '100vh'}
+        )
 
         return page_one_content
     elif pathname == "/page-2":
@@ -506,6 +435,97 @@ def render_page_content(pathname):
                                     )
                                     ])
         return page_four_content
+    elif pathname == "/page-5":
+        page_five_content = html.Div([
+                            dbc.Row([
+                                dbc.Col([
+                                    html.H1('Phintel'),
+                                    html.H5('Facilitating the extraction, aggregation, and exploration of phishing intelligence.')
+                                        ], align='center', style={'textAlign': 'center', 'verticalAlign': 'center',
+                                                'align-items': 'center', 'justify-content': 'center'})
+                                    ], align='center', justify='center',
+                                        style={'textAlign': 'center', 'verticalAlign': 'center',
+                                                'align-items': 'center', 'justify-content': 'center'}),
+                            html.Br(),
+                            html.Hr(),
+                            html.Br(),
+                            html.H2('Current Sources', style={'textAlign': 'center'}),
+                            html.Br(),
+                            dbc.Row([
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Openphish", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("OpenPhish is a fully automated self-contained platform for phishing intelligence. OpenPhish reports only new and live phishing URLs.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://openphish.com/', color='info')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        )),
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Phishstats", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("Fighting phishing and cybercrime since 2014 by gathering, enhancing and sharing phishing information with the infosec community.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href="https://phishstats.info/", color='info')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        ))   
+                                    ]),
+                            dbc.Row([
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("Phishtank", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("PhishTank is a collaborative clearing house for data and information about phishing on the Internet. Operated by Cisco Talos Intelligence Group.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://phishtank.org/', color='info')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        )),
+                                dbc.Col(dbc.Card(
+                                    dbc.CardBody(
+                                        [
+                                            html.H3("URLhaus", className="card-title"),
+                                            html.Br(),
+                                            html.Br(),
+                                            html.H6("URLhaus is a project from abuse.ch with the goal of sharing malicious URLs that are being used for malware distribution.",
+                                                    className="card-subtitle", style={'font-style': 'italic'}),
+                                            html.Br(),
+                                            html.Br(),
+                                            dbc.Button("Visit Site", href='https://urlhaus.abuse.ch/', color='info')
+                                            ]
+                                    ),
+                                    # color="info",
+                                    inverse=True,
+                                    outline=True
+                                        ))   
+                                    ]),
+                            html.Hr()
+                                                ])
+        return page_five_content
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [

@@ -6,7 +6,7 @@ import plotly.io as plt_io
 plt_io.templates["custom_dark"] = plt_io.templates["plotly_dark"]
 
 # set the paper_bgcolor and the plot_bgcolor to a new color
-plt_io.templates["custom_dark"]['layout']['paper_bgcolor'] = '#073642'
+plt_io.templates["custom_dark"]['layout']['paper_bgcolor'] = 'rgb(7, 54, 66, 0.8)'
 plt_io.templates["custom_dark"]['layout']['plot_bgcolor'] = '#002b36'
 
 # you may also want to change gridline colors if you are modifying background
@@ -24,7 +24,8 @@ navbar = dbc.NavbarSimple(
                 dbc.DropdownMenuItem("Home", href="/page-1"),
                 dbc.DropdownMenuItem("Visualizations", href="/page-2"),
                 dbc.DropdownMenuItem("Raw Data", href="/page-3"),
-                dbc.DropdownMenuItem("Predictive Analysis", href="/page-4")
+                dbc.DropdownMenuItem("Predictive Analysis", href="/page-4"),
+                dbc.DropdownMenuItem("About", href="/page-5")
             ],
             nav=True,
             in_navbar=True,
@@ -91,7 +92,8 @@ sidebar = html.Div(
                 dbc.NavLink("Home", href="/page-1", id="page-1-link"),
                 dbc.NavLink("Visualizations", href="/page-2", id="page-2-link"),
                 dbc.NavLink("Raw Data", href="/page-3", id="page-3-link"),
-                dbc.NavLink("Predictive Analysis", href="/page-4", id="page-4-link")
+                dbc.NavLink("Predictive Analysis", href="/page-4", id="page-4-link"),
+                dbc.NavLink("About", href="/page-5", id="page-5-link"),
             ],
             vertical=True,
             pills=True,
