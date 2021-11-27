@@ -385,12 +385,12 @@ def render_page_content(pathname):
                                         ),
                                 dcc.Graph(figure=bar_fig, id='bar_fig')
                                     ])
-                                ], style={'width': 'auto', 'height': 'auto', 'border': '2px black solid'}),
+                                ], style={'width': '50%', 'height': 'auto', 'border': '2px black solid'}),
                         dbc.Col([
                             html.Div([
                                 dcc.Graph(figure=sun_fig, id='sun_fig')
                                     ])
-                                ], style={'width': 'auto', 'height': 'auto', 'border': '2px black solid'})
+                                ], style={'width': '50%', 'height': 'auto', 'border': '2px black solid'})
                             ], className="g-0", align='end'),
                         ]),     
                 html.Div([
