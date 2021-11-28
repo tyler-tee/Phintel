@@ -66,8 +66,8 @@ To fix a bug or enhance an existing module, follow these steps:
 - [Dash](https://dash.plotly.com/introduction) - Dash is the original low-code framework for rapidly building data apps in Python, R, Julia, F#, and MATLAB®.
 
 ## To-do
-- [X] Build and test Docker image for portability.
-- [X] Add 'About' page.
+- [X] ~~Build and test Docker image for portability.~~
+- [X] ~~Add 'About' page.~~
 - [ ] Add 'OSINT' page.
 
 ## License
