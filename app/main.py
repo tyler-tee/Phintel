@@ -1,4 +1,3 @@
-from dash import html
 from callbacks import *
 
 app.layout = html.Div([

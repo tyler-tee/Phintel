@@ -1,6 +1,6 @@
 import dash
 from dash.dependencies import Input, Output, State
-from dash import dash_table, dcc, html
+from dash import dash_table, dcc
 from layouts import *
 from predict.phintel_predict import *
 
