@@ -1,3 +1,7 @@
+body {
+  background-image: url('background.jpg');
+}
+
 .dropbtn {
     background-color: #30404D;
     color: black;
