@@ -103,6 +103,7 @@ def render_page_content(pathname):
         )
 
         return page_one_content
+    
     elif pathname == "/page-2":
         page_two_content = html.Div([
             dbc.Row([
@@ -143,7 +144,9 @@ def render_page_content(pathname):
                     dcc.Graph(figure=target_fig, id='target_fig')
                         ], style={'display': 'inline-block', 'width': '50%', 'border': '2px black solid'})
                             ])
+        
         return page_two_content
+    
     elif pathname == "/page-3":
         page_three_content = html.Div([
                                     html.H1("Full Dataset", style={"text-align": "center"}),
@@ -172,7 +175,9 @@ def render_page_content(pathname):
                                                         ),
                                     html.Div(id='table-container')
                                     ])
+        
         return page_three_content
+    
     elif pathname == "/page-4":
         page_four_content = html.Div([
                                     html.H1("Predictive Analysis", style={"text-align": "center"}),
@@ -192,7 +197,9 @@ def render_page_content(pathname):
                                                     style={'font-style': 'italic', 'bottom': 0, 'position': 'fixed', 'background-color': 'rgb(0, 0, 0, 0.0)'})
                                                 )
                                     ])
+        
         return page_four_content
+    
     elif pathname == "/page-5":
         page_five_content = html.Div([
                             dbc.Row([
@@ -283,7 +290,9 @@ def render_page_content(pathname):
                                     ]),
                             html.Hr()
                                                 ])
+        
         return page_five_content
+    
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(
         [
