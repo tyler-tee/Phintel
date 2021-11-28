@@ -58,14 +58,14 @@ def toggle_sidebar(n, pathname, nclick):
 # this callback uses the current pathname to set the active state of the
 # corresponding nav link to true, allowing users to tell see page they are on
 @app.callback(
-    [Output(f"page-{i}-link", "active") for i in range(1, 6)],
+    [Output(f"page-{i}-link", "active") for i in range(1, 7)],
     [Input("url", "pathname")],
 )
 def toggle_active_links(pathname):
     if pathname == "/":
         # Treat page 1 as the homepage / index
-        return True, False, False, False, False
-    return [pathname == f"/page-{i}" for i in range(1, 6)]
+        return True, False, False, False, False, False
+    return [pathname == f"/page-{i}" for i in range(1, 7)]
 
 
 @app.callback(Output("navbar", "style"),
@@ -93,8 +93,11 @@ def render_page_content(pathname):
                         dbc.Col([
                             html.H1('Phintel'),
                             html.H5('Facilitating the extraction, aggregation, and exploration of phishing intelligence.'),
-                            dbc.Button('Visualizations', href='/page-2', color='info', style={'margin': '3px'}), dbc.Button('Raw Data', href='/page-3', color='info', style={'margin': '3px', 'padding-left': '26px', 'padding-right': '26px'}),
-                            dbc.Button('ML Analysis', href='/page-4', color='info', style={'margin': '3px', 'padding-left': '19px', 'padding-right': '19px'}), dbc.Button('About', href='/page-5', color='info', style={'margin': '3px', 'padding-left': '37px', 'padding-right': '37px'})
+                            dbc.Button('Visualizations', href='/page-2', color='info', style={'margin': '3px'}),
+                            dbc.Button('Raw Data', href='/page-3', color='info', style={'margin': '3px', 'padding-left': '26px', 'padding-right': '26px'}),
+                            dbc.Button('ML Analysis', href='/page-4', color='info', style={'margin': '3px', 'padding-left': '19px', 'padding-right': '19px'}),
+                            dbc.Button('OSINT', href='/page-5', color='info', style={'margin': '3px', 'padding-left': '36px', 'padding-right': '36px'}),
+                            dbc.Button('About', href='/page-6', color='info', style={'margin': '3px', 'padding-left': '37px', 'padding-right': '37px'})
                         ],
                         style={'height': '100%', 'text-align': 'center'})
                     ], class_name='h-50'
@@ -202,6 +205,12 @@ def render_page_content(pathname):
     
     elif pathname == "/page-5":
         page_five_content = html.Div([
+                                    html.H1('Coming soon...')
+                                    ])
+        return page_five_content
+    
+    elif pathname == "/page-6":
+        page_six_content = html.Div([
                             dbc.Row([
                                 dbc.Col([
                                     html.H1('Phintel'),
@@ -291,7 +300,8 @@ def render_page_content(pathname):
                             html.Hr()
                                                 ])
         
-        return page_five_content
+        
+        return page_six_content
     
     # If the user tries to reach a different page, return a 404 message
     return dbc.Jumbotron(

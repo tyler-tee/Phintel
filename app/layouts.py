@@ -246,7 +246,8 @@ navbar = dbc.NavbarSimple(
                 dbc.DropdownMenuItem("Visualizations", href="/page-2"),
                 dbc.DropdownMenuItem("Raw Data", href="/page-3"),
                 dbc.DropdownMenuItem("Predictive Analysis", href="/page-4"),
-                dbc.DropdownMenuItem("About", href="/page-5")
+                dbc.DropdownMenuItem("OSINT", href="/page-5"),
+                dbc.DropdownMenuItem("About", href="/page-6")
             ],
             nav=True,
             in_navbar=True,
@@ -315,7 +316,8 @@ sidebar = html.Div(
                 dbc.NavLink("Visualizations", href="/page-2", id="page-2-link"),
                 dbc.NavLink("Raw Data", href="/page-3", id="page-3-link"),
                 dbc.NavLink("Predictive Analysis", href="/page-4", id="page-4-link"),
-                dbc.NavLink("About", href="/page-5", id="page-5-link"),
+                dbc.NavLink("OSINT", href="/page-5", id="page-5-link"),
+                dbc.NavLink("About", href="/page-6", id="page-6-link")
             ],
             vertical=True,
             pills=True,
