@@ -214,8 +214,10 @@ def urlscan_url_search(url: str):
     if response.status_code == 200:
         results = response.json()['results']
         if results:
-            results = [i['result'] for i in results]
+            results = [f"https://urlscan.io/result/{i['task']['uuid']}" for i in results]
+            
             return results
+        
         else:
             return None
     else:

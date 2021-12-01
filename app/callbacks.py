@@ -205,7 +205,16 @@ def render_page_content(pathname):
     
     elif pathname == "/page-5":
         page_five_content = html.Div([
-                                    html.H1('Coming soon...')
+                                    html.H1("OSINT", style={"text-align": "center"}),
+                                    html.Hr(),
+                                    html.Div([
+                                            dbc.Label("Open Source Analysis"),
+                                            dbc.Input(id='osint_input', placeholder='https://Malicious-URL.bad', value='https://Malicious-URL.bad',
+                                                    debounce=True, inputmode='url'),
+                                            html.Br(),
+                                            html.Div(id='osint_output')
+                                    ])
+
                                     ])
         return page_five_content
     
@@ -325,5 +334,46 @@ def analyze_url(value):
             return f"Phintel's analysis for {value}: {result}"
         except Exception as e:
             return f"Phintel experienced an error analyzing the supplied URL:\n{e}"
+    else:
+        return ""
+
+
+@app.callback(Output("osint_output", "children"),
+              [Input("osint_input", "value")])
+def osint_analysis(value):
+    if (value != 'https://Malicious-URL.bad') and ('.' in value):
+        analysis_dict = {'data': {}}
+        try:
+            """
+            analysis_dict['data']['phintel'] = primary_db_search(value, df_primary)
+            analysis_dict['data']['virus_total'] = vt_url_search(value)
+            analysis_dict['data']['urlscan'] = urlscan_url_search(value)
+            """
+            phintel_results = primary_db_search(value, df_primary)
+            vt_results = vt_url_search(value)
+            urlscan_results = urlscan_url_search(value)[0]
+        except Exception as e:
+            print(e)
+        
+        results = html.Div([
+                            dbc.Row([
+                                    dbc.Col([
+                                            html.Div(f"Found in Phintel DB: {phintel_results}")
+                                            ])
+                                    
+                                    ]),
+                            dbc.Row([
+                                    dbc.Col([
+                                            html.Div([f"VirusTotal Results: ", dcc.Link('Results', href=vt_results)])
+                                            ])
+                                    ]),
+                            dbc.Row([
+                                    dbc.Col([
+                                            html.Div([f"URLScan.io Results: ", dcc.Link('Results', href=urlscan_results)]) 
+                                            ])
+                                    ])
+                            ])
+
+        return results
     else:
         return ""
