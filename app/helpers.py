@@ -1,3 +1,4 @@
+import base64
 import datetime
 from io import StringIO
 import pandas as pd
@@ -201,11 +202,8 @@ def rawhttp_sub(url: str) -> str:
         return response.text
     
 
-def urlscan_url_search(url: str) -> dict:
-    if config['urlscan_key']:
-        headers = {"API-Key": config['urlscan_key']}
-    else:
-        headers = {}
+def urlscan_url_search(url: str):
+    headers = {"API-Key": config['urlscan_key']} if config['urlscan_key'] else {}
         
     if url.startswith('http'):
         url = url.replace('http://', '').replace('https://', '')
@@ -224,5 +222,17 @@ def urlscan_url_search(url: str) -> dict:
         print('URLScan.io Error:', response.status_code)
 
 
-def vt_url_search(url: str) -> dict:
-    pass
+def vt_url_search(url: str):
+    if config['virustotal_key']:
+        headers = {'x-apikey': config['virustotal_key']}
+        
+        url_id = base64.urlsafe_b64encode(url.encode()).decode().strip("=")
+    
+        vt_url = f"https://www.virustotal.com/api/v3/urls/{url_id}"
+        
+        response = requests.get(vt_url, headers=headers)
+        
+        if response.status_code == 200:
+            return f"https://www.virustotal.com/gui/url/{response.json()['data']['id']}"
+        else:
+            return None
