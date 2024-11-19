@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.14.0a1-slim-bookworm
 LABEL maintainer "Tyler Talaga"
 ENV TZ=US/Eastern
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
