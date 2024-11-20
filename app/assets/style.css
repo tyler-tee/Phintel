@@ -3,72 +3,47 @@ body {
 }
 
 .dropbtn {
-    background-color: #30404D;
-    color: black;
-    border: none;
-    cursor: pointer;
-  }
-
-  .custom-dropdown {
-    background: #7f99ad;
-    border-color: #7f99ad;
-    color: black;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .custom-dropdown .Select--single {
-    background: #7f99ad;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background: rgba(48,46,77,0);
-    background-color: rgba(48,46,77,0);
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  }
-  
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    color: black;
-    background-color: #30404D;
-    text-decoration: none;
-    display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #30404D}
-  
-  /* Show the dropdown menu on hover */
-  .custom-dropdown:hover .dropdown-content {
-    background-color: #30404D;
-    display: block;
-  }
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .custom-dropdown:hover .dropbtn {
-    background-color: #30404D;
-  }
-
-  .custom-dropdown .Select--single {
-    background-color: #30404D;
-    border-color: #30404D;
-    color: black;
-  }
-
-  .custom-dropdown .Select--single .Select-value {
-    background-color: #30404D;
-    border-color: #30404D;
-    color: black;
-  }
-
-
-#source_dropdown .VirtualizedSelectFocusedOption {
-    background-color: #30404D;
-    color: white;
+  background-color: #30404D;
+  color: black;
+  border: none;
+  cursor: pointer;
 }
-.VirtualizedSelectOption {
-    background-color: #30404D;
-    color: white;
+
+.custom-dropdown,
+.custom-dropdown:hover .dropdown-content, 
+.dropdown-content a:hover,
+.VirtualizedSelectOption,
+#source_dropdown .VirtualizedSelectFocusedOption {
+  background-color: #30404D;
+}
+
+.custom-dropdown, 
+.custom-dropdown .Select--single, 
+.custom-dropdown .Select--single .Select-value {
+  color: black;
+  background: #7f99ad;
+  border-color: #7f99ad;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: rgba(48,46,77,0);
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.custom-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.custom-dropdown:hover .dropbtn, 
+.VirtualizedSelectOption,
+#source_dropdown .VirtualizedSelectFocusedOption {
+  color: white;
 }
